@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            class Subject {
+                constructor() {
+                    this.news = '';
+                    this.observers = [];
+                }
+
+                addNews(text) {
+                    this.news = text;
+                    this.broadcast();
+                }
+
+                broadcast() {
+                    return this.observers.forEach(observer => observer.news(this))
+                }
+
+                subscribe(observer) {
+                    this.observers.push(observer);
+                }
+
+                unsubscribe(observer) {
+                    this.observers = this.observers.filter(elem => elem !== observer);
+                }
+            }
+
+            class MagazineObserver {
+                news(news) {
+                    console.log(`Magazine News: ${news.news}`);
+                }
+            }
+
+            class NewspaperObserver {
+                news(news) {
+                    console.log(`Newspaper News: ${news.news}`);
+                }
+            }
+
+            const subject = new Subject();
+            const magazineObserver = new MagazineObserver();
+            const newspaperObserver = new NewspaperObserver();
+
+            subject.subscribe(magazineObserver);
+            subject.subscribe(newspaperObserver);
+            subject.addNews('Lorem Ipsum is simply dummy text of the printing and typesetting industry.');
+
+            subject.unsubscribe(newspaperObserver);
+            subject.addNews('Contrary to popular belief, Lorem Ipsum is not simply random text.');
+        </script>
+    </head>
+    <body>
+        <div id="news"></div>
+    </body>
+</html>
